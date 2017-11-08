@@ -1,6 +1,6 @@
 provider "aws" {
-    region = "eu-central-1"
-    profile = "matt_digital"
+    region = "eu-tu-ceilalti"
+    profile = "fericirii19"
 }
 
 resource "aws_security_group" "allow_http_inbound" {
@@ -27,14 +27,14 @@ resource "aws_security_group" "allow_manb3ast" {
         from_port = 22 
         to_port = 22
         protocol = "tcp"
-        cidr_blocks = ["78.96.101.50/32"]
+        cidr_blocks = ["999.999.999.999/999"]
     }
 }
 
 resource "aws_instance" "digital" {
     ami = "ami-1e339e71"
     instance_type = "t2.micro"
-    key_name = "matt_digital"
+    key_name = "manb3ast"
     vpc_security_group_ids =
         [ "${aws_security_group.allow_http_inbound.id}", "${aws_security_group.allow_manb3ast.id}" ]
 
@@ -42,7 +42,17 @@ resource "aws_instance" "digital" {
 
     tags {
         Name = "digital_instance"
-    }
+        }
+    provisioner "file" {
+      source      = "/Users/matt/tmp/index.html"
+      destination = "/var/tmp/index.html"
+        
+      connection {
+        type     = "ssh"
+        user     = "ubuntu"
+        private_key = "${file("/fericirii/19/manb3ast")}"
+            }  
+        }
 }
 
 
